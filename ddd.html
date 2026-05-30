@@ -1,171 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الشيخ علي</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشيخ علي - الموقع الرسمي</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* إعدادات الألوان الأساسية المتناسقة مع الفخامة */
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-bg: #0d0d0d;
+            --sec-bg: #1a1a1a;
+            --text-light: #f4f4f4;
+            --text-muted: #a0a0a0;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Cairo',sans-serif;
-}
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
 
-body{
-    background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);
-    color:white;
-    min-height:100vh;
-}
+        /* تنسيق الهيدر (الشريط العلوي) */
+        header {
+            background-color: var(--sec-bg);
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
 
-header{
-    padding:20px 8%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        .logo {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
-.logo{
-    font-size:32px;
-    font-weight:900;
-    color:#fbbf24;
-}
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
 
-nav a{
-    color:white;
-    text-decoration:none;
-    margin-right:25px;
-    transition:.3s;
-}
+        nav a:hover {
+            color: var(--primary-gold);
+        }
 
-nav a:hover{
-    color:#fbbf24;
-}
+        /* تنسيق القسم الرئيسي (Hero Section) */
+        .hero {
+            height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            /* يمكنك استبدال الرابط أدناه بصورة خلفية إسلامية أو زخرفة تناسب المحتوى */
+            background: linear-gradient(rgba(13, 13, 13, 0.85), rgba(13, 13, 13, 0.95)), url('https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        }
 
-.hero{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-    height:80vh;
-    padding:20px;
-}
+        .hero h1 {
+            font-family: 'Amiri', serif;
+            font-size: 4.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
 
-.hero h1{
-    font-size:70px;
-    font-weight:900;
-    margin-bottom:15px;
-    color:#fbbf24;
-    text-shadow:0 0 25px rgba(251,191,36,.5);
-}
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
 
-.hero p{
-    font-size:22px;
-    max-width:700px;
-    line-height:1.8;
-    opacity:.9;
-}
+        .cta-button {
+            padding: 15px 40px;
+            background-color: transparent;
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
 
-.btn{
-    margin-top:30px;
-    display:inline-block;
-    padding:15px 35px;
-    background:#fbbf24;
-    color:#111827;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:bold;
-    transition:.3s;
-}
+        .cta-button:hover {
+            background-color: var(--primary-gold);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
 
-.btn:hover{
-    transform:translateY(-5px);
-    box-shadow:0 10px 25px rgba(251,191,36,.4);
-}
-
-.cards{
-    padding:70px 8%;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:rgba(255,255,255,.05);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.1);
-    padding:30px;
-    border-radius:20px;
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-10px);
-}
-
-.card h3{
-    color:#fbbf24;
-    margin-bottom:15px;
-}
-
-footer{
-    text-align:center;
-    padding:25px;
-    border-top:1px solid rgba(255,255,255,.1);
-    color:#cbd5e1;
-}
-</style>
+        /* تنسيق الفوتر */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: var(--sec-bg);
+            color: var(--text-muted);
+            border-top: 1px solid #333;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-    <div class="logo">الشيخ علي</div>
+    <header>
+        <a href="#" class="logo">الشيخ علي</a>
+        <nav>
+            <a href="#">الرئيسية</a>
+            <a href="#">المقالات</a>
+            <a href="#">المكتبة الصوتية</a>
+            <a href="#">اتصل بنا</a>
+        </nav>
+    </header>
 
-    <nav>
-        <a href="#">الرئيسية</a>
-        <a href="#">الدروس</a>
-        <a href="#">المقالات</a>
-        <a href="#">تواصل معنا</a>
-    </nav>
-</header>
+    <section class="hero">
+        <h1>الشيخ علي</h1>
+        <p>مرحباً بكم في المنصة الرسمية. نسعى لتقديم المحتوى الهادف بطابع عصري ومتميز، ليكون مرجعاً موثوقاً لكل باحث عن المعرفة.</p>
+        <a href="#" class="cta-button">تصفح المحتوى</a>
+    </section>
 
-<section class="hero">
-    <h1>الشيخ علي</h1>
-    <p>
-        موقع إسلامي يقدم الدروس والمحاضرات والمقالات الدينية
-        بأسلوب مميز وواجهة احترافية تساعد الزائر على الوصول للمحتوى بسهولة.
-    </p>
-
-    <a href="#" class="btn">استكشف المحتوى</a>
-</section>
-
-<section class="cards">
-
-    <div class="card">
-        <h3>الدروس</h3>
-        <p>مجموعة متنوعة من الدروس والشروحات الإسلامية.</p>
-    </div>
-
-    <div class="card">
-        <h3>المحاضرات</h3>
-        <p>محاضرات صوتية ومرئية بجودة عالية.</p>
-    </div>
-
-    <div class="card">
-        <h3>المقالات</h3>
-        <p>مقالات دينية وتربوية هادفة لجميع الفئات.</p>
-    </div>
-
-</section>
-
-<footer>
-    © 2026 جميع الحقوق محفوظة | الشيخ علي
-</footer>
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 - موقع الشيخ علي</p>
+    </footer>
 
 </body>
 </html>
