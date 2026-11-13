@@ -246,59 +246,168 @@ input:focus, select:focus {
   box-shadow: 0 4px 15px var(--accent-cyan-glow);
 }
 
-.timer-box {
-  text-align: center;
-}
-
-.timer-circle {
+/* ==================== تصميم الساعة القلّابة (Flip Clock) ==================== */
+.flip-wrapper {
   position: relative;
-  width: 230px;
-  height: 230px;
-  margin: 10px auto 20px;
+  text-align: center;
+  padding: 28px 14px 20px;
+  transition: all 0.3s ease;
 }
 
-.timer-circle svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.bg-ring {
-  fill: none;
-  stroke: var(--bg-input);
-  stroke-width: 6;
-}
-
-.progress-ring {
-  fill: none;
-  stroke: var(--accent-cyan);
-  stroke-width: 7;
-  stroke-linecap: round;
-  stroke-dasharray: 283;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 0.5s linear;
-}
-
-.timer-display {
-  position: absolute;
+.flip-wrapper.fullscreen-mode {
+  position: fixed;
   inset: 0;
+  z-index: 9999;
+  background: #000000;
+  border-radius: 0;
+  border: none;
+  margin: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.fullscreen-toggle {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 16px;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#time-left {
-  font-size: 44px;
-  font-weight: 800;
-  letter-spacing: 2px;
+.flip-wrapper.fullscreen-mode .fullscreen-toggle {
+  top: 24px;
+  left: 24px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  color: #fff;
 }
 
-#session-reward-label {
+.flip-clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin: 15px auto 20px;
+  perspective: 1000px;
+}
+
+.flip-group {
+  display: flex;
+  gap: 6px;
+}
+
+.flip-card {
+  position: relative;
+  width: 68px;
+  height: 105px;
+  background: #1c1c1e;
+  border-radius: 10px;
+  font-size: 68px;
+  font-weight: 800;
+  color: #f5f5f7;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.flip-wrapper.fullscreen-mode .flip-card {
+  width: 20vw;
+  max-width: 150px;
+  height: 30vw;
+  max-height: 220px;
+  font-size: min(20vw, 145px);
+  border-radius: 14px;
+}
+
+.flip-wrapper.fullscreen-mode .flip-clock {
+  gap: 5vw;
+}
+
+.flip-card .top,
+.flip-card .bottom,
+.flip-card .flip-leaf-top,
+.flip-card .flip-leaf-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: #1f1f1f;
+  display: flex;
+  justify-content: center;
+}
+
+.flip-card .top,
+.flip-card .flip-leaf-top {
+  top: 0;
+  border-radius: 10px 10px 0 0;
+  align-items: flex-end;
+  border-bottom: 1px solid #0a0a0a;
+}
+
+.flip-card .bottom,
+.flip-card .flip-leaf-bottom {
+  bottom: 0;
+  border-radius: 0 0 10px 10px;
+  align-items: flex-start;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: #1a1a1a;
+}
+
+.flip-card span {
+  line-height: 0;
+  font-family: 'Arial Narrow', 'Roboto Condensed', system-ui, sans-serif;
+}
+
+.flip-card .flip-leaf-top {
+  z-index: 3;
+  transform-origin: bottom;
+  animation: flipDownTop 0.3s ease-in forwards;
+}
+
+.flip-card .flip-leaf-bottom {
+  z-index: 4;
+  transform-origin: top;
+  transform: rotateX(90deg);
+  animation: flipDownBottom 0.3s 0.3s ease-out forwards;
+}
+
+@keyframes flipDownTop {
+  0% { transform: rotateX(0deg); }
+  100% { transform: rotateX(-90deg); }
+}
+
+@keyframes flipDownBottom {
+  0% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+.reward-subtitle {
+  display: block;
   color: var(--accent-gold);
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 13px;
   font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.flip-wrapper.fullscreen-mode .pomo-task-selector {
+  display: none;
+}
+
+.flip-wrapper.fullscreen-mode .timer-controls {
+  max-width: 340px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .pomo-task-selector {
@@ -518,7 +627,7 @@ input:focus, select:focus {
   color: var(--text-muted);
 }
 
-/* قسم المتجر المستقل (جديد) */
+/* قسم المتجر المستقل */
 .store-hero {
   text-align: center;
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(6, 182, 212, 0.08));
