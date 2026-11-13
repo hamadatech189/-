@@ -1,5 +1,5 @@
 // مفتاح التخزين الدائم الخاص بحمادة
-const STORAGE_KEY = 'hamada_productivity_pro_v2';
+const STORAGE_KEY = 'hamada_productivity_pro_v3';
 
 let appState = {
   balance: 0,
@@ -34,7 +34,7 @@ const quotes = [
 ];
 
 function loadState() {
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('hamada_productivity_pro_v2');
   if (saved) {
     try {
       appState = { ...appState, ...JSON.parse(saved) };
@@ -79,6 +79,7 @@ function playSound(type) {
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3000);
@@ -88,8 +89,10 @@ function showToast(msg) {
 function switchTab(tabName) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tab-${tabName}`).classList.add('active');
-  document.querySelector(`.nav-item[data-target="${tabName}"]`).classList.add('active');
+  const targetTab = document.getElementById(`tab-${tabName}`);
+  const targetNav = document.querySelector(`.nav-item[data-target="${tabName}"]`);
+  if (targetTab) targetTab.classList.add('active');
+  if (targetNav) targetNav.classList.add('active');
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -100,88 +103,151 @@ const themeBtn = document.getElementById('theme-toggle');
 function applyTheme() {
   if (appState.darkMode) {
     document.body.classList.remove('light-mode');
-    themeBtn.textContent = '☀️';
+    if (themeBtn) themeBtn.textContent = '☀️';
   } else {
     document.body.classList.add('light-mode');
-    themeBtn.textContent = '🌙';
+    if (themeBtn) themeBtn.textContent = '🌙';
   }
 }
-themeBtn.addEventListener('click', () => {
-  appState.darkMode = !appState.darkMode;
-  applyTheme();
-  saveState();
-});
+if (themeBtn) {
+  themeBtn.addEventListener('click', () => {
+    appState.darkMode = !appState.darkMode;
+    applyTheme();
+    saveState();
+  });
+}
 
-// ==================== 1. البومودورو ====================
+// ==================== 1. البومودورو (Flip Clock) ====================
 let currentMode = 'focus';
 let timerInterval = null;
 let isRunning = false;
-let totalSeconds = appState.pomoSettings.focus * 60;
-let remainingSeconds = totalSeconds;
+let remainingSeconds = 25 * 60;
 
-const timeLeftEl = document.getElementById('time-left');
-const progressRing = document.getElementById('progress-ring');
 const startPauseBtn = document.getElementById('start-pause-btn');
 
-function updateTimerDisplay() {
+function updateFlipDigit(cardId, newDigit) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const topSpan = card.querySelector('.top span');
+  const bottomSpan = card.querySelector('.bottom span');
+  if (!topSpan || !bottomSpan) return;
+
+  const currentDigit = topSpan.textContent;
+  if (currentDigit === newDigit) return;
+
+  card.querySelectorAll('.flip-leaf-top, .flip-leaf-bottom').forEach(el => el.remove());
+
+  const leafTop = document.createElement('div');
+  leafTop.className = 'flip-leaf-top';
+  leafTop.innerHTML = `<span>${currentDigit}</span>`;
+
+  const leafBottom = document.createElement('div');
+  leafBottom.className = 'flip-leaf-bottom';
+  leafBottom.innerHTML = `<span>${newDigit}</span>`;
+
+  topSpan.textContent = newDigit;
+  card.appendChild(leafTop);
+  card.appendChild(leafBottom);
+
+  setTimeout(() => {
+    bottomSpan.textContent = newDigit;
+    leafTop.remove();
+    leafBottom.remove();
+  }, 580);
+}
+
+function updateTimerDisplay(instant = false) {
   const mins = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
   const secs = (remainingSeconds % 60).toString().padStart(2, '0');
-  timeLeftEl.textContent = `${mins}:${secs}`;
 
-  const offset = 283 - (remainingSeconds / totalSeconds) * 283;
-  progressRing.style.strokeDashoffset = offset;
+  const digits = {
+    'min-tens': mins[0],
+    'min-ones': mins[1],
+    'sec-tens': secs[0],
+    'sec-ones': secs[1]
+  };
+
+  Object.entries(digits).forEach(([id, val]) => {
+    if (instant) {
+      const card = document.getElementById(id);
+      if (card) {
+        const t = card.querySelector('.top span');
+        const b = card.querySelector('.bottom span');
+        if (t) t.textContent = val;
+        if (b) b.textContent = val;
+      }
+    } else {
+      updateFlipDigit(id, val);
+    }
+  });
 }
 
 function setTimerMode(mode) {
   clearInterval(timerInterval);
   isRunning = false;
-  startPauseBtn.textContent = 'بدء التركيز';
+  if (startPauseBtn) startPauseBtn.textContent = 'بدء التركيز';
   currentMode = mode;
 
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+  const activeModeBtn = document.querySelector(`.mode-btn[data-mode="${mode}"]`);
+  if (activeModeBtn) activeModeBtn.classList.add('active');
 
-  const mins = appState.pomoSettings[mode];
-  totalSeconds = mins * 60;
-  remainingSeconds = totalSeconds;
+  const mins = Number(appState.pomoSettings[mode]) || 25;
+  remainingSeconds = mins * 60;
   
   const rewardLabel = document.getElementById('session-reward-label');
-  rewardLabel.textContent = mode === 'focus' 
-    ? `مكافأة الجلسة: +${appState.pomoSettings.reward} 💰` 
-    : 'استراحة هادئة لتجديد الطاقة';
+  if (rewardLabel) {
+    rewardLabel.textContent = mode === 'focus' 
+      ? `مكافأة الجلسة: +${appState.pomoSettings.reward} 💰` 
+      : 'استراحة هادئة لتجديد الطاقة';
+  }
 
-  updateTimerDisplay();
+  updateTimerDisplay(true);
 }
 
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => setTimerMode(btn.dataset.mode));
 });
 
-startPauseBtn.addEventListener('click', () => {
-  if (isRunning) {
-    clearInterval(timerInterval);
-    isRunning = false;
-    startPauseBtn.textContent = 'استكمال';
-  } else {
-    isRunning = true;
-    startPauseBtn.textContent = 'إيقاف مؤقت';
-    timerInterval = setInterval(() => {
-      remainingSeconds--;
-      updateTimerDisplay();
+if (startPauseBtn) {
+  startPauseBtn.addEventListener('click', () => {
+    if (isRunning) {
+      clearInterval(timerInterval);
+      isRunning = false;
+      startPauseBtn.textContent = 'استكمال';
+    } else {
+      isRunning = true;
+      startPauseBtn.textContent = 'إيقاف مؤقت';
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        updateTimerDisplay(false);
 
-      if (remainingSeconds <= 0) {
-        clearInterval(timerInterval);
-        isRunning = false;
-        playSound('alarm');
-        handleTimerComplete();
-      }
-    }, 1000);
-  }
-});
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          isRunning = false;
+          playSound('alarm');
+          handleTimerComplete();
+        }
+      }, 1000);
+    }
+  });
+}
 
-document.getElementById('reset-timer-btn').addEventListener('click', () => {
-  setTimerMode(currentMode);
-});
+const resetBtn = document.getElementById('reset-timer-btn');
+if (resetBtn) {
+  resetBtn.addEventListener('click', () => setTimerMode(currentMode));
+}
+
+// وضع ملء الشاشة للساعة القلّابة
+const flipWrapper = document.getElementById('flip-clock-wrapper');
+const fsBtn = document.getElementById('fullscreen-pomo-btn');
+if (fsBtn && flipWrapper) {
+  fsBtn.addEventListener('click', () => {
+    flipWrapper.classList.toggle('fullscreen-mode');
+    const isFs = flipWrapper.classList.contains('fullscreen-mode');
+    fsBtn.textContent = isFs ? '✕' : '⛶';
+  });
+}
 
 function handleTimerComplete() {
   if (currentMode === 'focus') {
@@ -207,55 +273,62 @@ function handleTimerComplete() {
   setTimerMode(currentMode);
 }
 
-document.getElementById('settings-timer-btn').addEventListener('click', () => {
-  const box = document.getElementById('pomo-settings-box');
-  box.classList.toggle('hidden');
-  document.getElementById('set-focus').value = appState.pomoSettings.focus;
-  document.getElementById('set-short').value = appState.pomoSettings.short;
-  document.getElementById('set-long').value = appState.pomoSettings.long;
-  document.getElementById('set-reward').value = appState.pomoSettings.reward;
-});
+const settingsBtn = document.getElementById('settings-timer-btn');
+if (settingsBtn) {
+  settingsBtn.addEventListener('click', () => {
+    const box = document.getElementById('pomo-settings-box');
+    box.classList.toggle('hidden');
+    document.getElementById('set-focus').value = appState.pomoSettings.focus;
+    document.getElementById('set-short').value = appState.pomoSettings.short;
+    document.getElementById('set-long').value = appState.pomoSettings.long;
+    document.getElementById('set-reward').value = appState.pomoSettings.reward;
+  });
+}
 
-document.getElementById('save-pomo-settings').addEventListener('click', () => {
-  appState.pomoSettings.focus = Number(document.getElementById('set-focus').value) || 25;
-  appState.pomoSettings.short = Number(document.getElementById('set-short').value) || 5;
-  appState.pomoSettings.long = Number(document.getElementById('set-long').value) || 15;
-  appState.pomoSettings.reward = Number(document.getElementById('set-reward').value) || 25;
-  saveState();
-  setTimerMode(currentMode);
-  document.getElementById('pomo-settings-box').classList.add('hidden');
-  showToast('تم حفظ إعدادات المؤقت ✅');
-});
+const savePomoBtn = document.getElementById('save-pomo-settings');
+if (savePomoBtn) {
+  savePomoBtn.addEventListener('click', () => {
+    appState.pomoSettings.focus = Number(document.getElementById('set-focus').value) || 25;
+    appState.pomoSettings.short = Number(document.getElementById('set-short').value) || 5;
+    appState.pomoSettings.long = Number(document.getElementById('set-long').value) || 15;
+    appState.pomoSettings.reward = Number(document.getElementById('set-reward').value) || 25;
+    saveState();
+    setTimerMode(currentMode);
+    document.getElementById('pomo-settings-box').classList.add('hidden');
+    showToast('تم حفظ إعدادات المؤقت ✅');
+  });
+}
 
 // ==================== 2. المهام ====================
 const dateInput = document.getElementById('selected-date');
 const todayStr = new Date().toISOString().split('T')[0];
-dateInput.value = todayStr;
+if (dateInput) dateInput.value = todayStr;
 
 function updateDateLabel() {
   const label = document.getElementById('date-label');
+  if (!label || !dateInput) return;
   if (dateInput.value === todayStr) label.textContent = 'اليوم';
   else label.textContent = new Date(dateInput.value).toLocaleDateString('ar-EG', { weekday: 'long' });
   renderTasks();
 }
 
-dateInput.addEventListener('change', updateDateLabel);
+if (dateInput) dateInput.addEventListener('change', updateDateLabel);
 
-document.getElementById('prev-day').addEventListener('click', () => {
+document.getElementById('prev-day')?.addEventListener('click', () => {
   const d = new Date(dateInput.value);
   d.setDate(d.getDate() - 1);
   dateInput.value = d.toISOString().split('T')[0];
   updateDateLabel();
 });
 
-document.getElementById('next-day').addEventListener('click', () => {
+document.getElementById('next-day')?.addEventListener('click', () => {
   const d = new Date(dateInput.value);
   d.setDate(d.getDate() + 1);
   dateInput.value = d.toISOString().split('T')[0];
   updateDateLabel();
 });
 
-document.getElementById('add-task-btn').addEventListener('click', () => {
+document.getElementById('add-task-btn')?.addEventListener('click', () => {
   const title = document.getElementById('task-title').value.trim();
   const price = Number(document.getElementById('task-price').value) || 10;
   const time = document.getElementById('task-time').value;
@@ -307,16 +380,20 @@ function deleteTask(id) {
 function renderTasks() {
   const list = document.getElementById('tasks-list');
   const select = document.getElementById('active-task-select');
+  if (!list) return;
+
   const dayTasks = appState.tasks.filter(t => t.date === dateInput.value);
 
   list.innerHTML = dayTasks.length === 0 
     ? '<p style="text-align:center; color:var(--text-muted); padding:25px;">لا توجد مهام مسجلة في هذا اليوم.</p>' 
     : '';
 
-  select.innerHTML = '<option value="">-- ربط الجلسة بمهمة حالية --</option>';
-  appState.tasks.filter(t => t.date === todayStr && !t.completed).forEach(t => {
-    select.innerHTML += `<option value="${t.id}">${t.title} (+${t.price} 💰)</option>`;
-  });
+  if (select) {
+    select.innerHTML = '<option value="">-- ربط الجلسة بمهمة حالية --</option>';
+    appState.tasks.filter(t => t.date === todayStr && !t.completed).forEach(t => {
+      select.innerHTML += `<option value="${t.id}">${t.title} (+${t.price} 💰)</option>`;
+    });
+  }
 
   dayTasks.forEach(task => {
     const div = document.createElement('div');
@@ -336,7 +413,7 @@ function renderTasks() {
   });
 }
 
-document.getElementById('enable-notif-btn').addEventListener('click', () => {
+document.getElementById('enable-notif-btn')?.addEventListener('click', () => {
   if ('Notification' in window) {
     Notification.requestPermission().then(perm => {
       if (perm === 'granted') showToast('تم تفعيل الإشعارات بنجاح 🔔');
@@ -346,11 +423,11 @@ document.getElementById('enable-notif-btn').addEventListener('click', () => {
 });
 
 // ==================== 3. التحديات ====================
-document.getElementById('toggle-add-challenge').addEventListener('click', () => {
+document.getElementById('toggle-add-challenge')?.addEventListener('click', () => {
   document.getElementById('add-challenge-box').classList.toggle('hidden');
 });
 
-document.getElementById('save-challenge-btn').addEventListener('click', () => {
+document.getElementById('save-challenge-btn')?.addEventListener('click', () => {
   const title = document.getElementById('chal-title').value.trim();
   const type = document.getElementById('chal-type').value;
   const target = Number(document.getElementById('chal-target').value);
@@ -380,6 +457,7 @@ function claimChallenge(id) {
 
 function renderChallenges() {
   const list = document.getElementById('challenges-list');
+  if (!list) return;
   list.innerHTML = '';
   const currentHours = +(appState.totalFocusMinutes / 60).toFixed(1);
 
@@ -409,12 +487,12 @@ function renderChallenges() {
   });
 }
 
-// ==================== 4. المتجر (مستقل) ====================
-document.getElementById('toggle-add-reward').addEventListener('click', () => {
+// ==================== 4. المتجر ====================
+document.getElementById('toggle-add-reward')?.addEventListener('click', () => {
   document.getElementById('add-reward-box').classList.toggle('hidden');
 });
 
-document.getElementById('save-reward-btn').addEventListener('click', () => {
+document.getElementById('save-reward-btn')?.addEventListener('click', () => {
   const title = document.getElementById('reward-title').value.trim();
   const cost = Number(document.getElementById('reward-cost').value);
   if (!title || !cost) return showToast('أدخل اسم المكافأة وتكلفتها');
@@ -445,6 +523,7 @@ function buyReward(id) {
 
 function renderRewards() {
   const list = document.getElementById('rewards-store-list');
+  if (!list) return;
   list.innerHTML = '';
   appState.rewards.forEach(r => {
     const div = document.createElement('div');
@@ -461,7 +540,7 @@ function renderRewards() {
 }
 
 // ==================== 5. المحفظة والنسخ الاحتياطي ====================
-document.getElementById('export-data-btn').addEventListener('click', () => {
+document.getElementById('export-data-btn')?.addEventListener('click', () => {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
   const downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute("href", dataStr);
@@ -472,7 +551,7 @@ document.getElementById('export-data-btn').addEventListener('click', () => {
   showToast('تم تصدير النسخة الاحتياطية 📥');
 });
 
-document.getElementById('import-data-input').addEventListener('change', (e) => {
+document.getElementById('import-data-input')?.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -492,11 +571,17 @@ document.getElementById('import-data-input').addEventListener('change', (e) => {
 
 // ==================== التشغيل العام ====================
 function updateGlobalUI() {
-  document.getElementById('header-balance').textContent = appState.balance;
-  document.getElementById('wallet-big-balance').textContent = `${appState.balance} 💰`;
-  document.getElementById('spent-balance').textContent = `${appState.spentBalance || 0} 💰`;
-  document.getElementById('total-hours-display').textContent = `${(appState.totalFocusMinutes / 60).toFixed(1)} ساعة`;
-  document.getElementById('total-tasks-display').textContent = `${appState.totalTasksCompleted} مهمة`;
+  const hBal = document.getElementById('header-balance');
+  const wBal = document.getElementById('wallet-big-balance');
+  const sBal = document.getElementById('spent-balance');
+  const tHours = document.getElementById('total-hours-display');
+  const tTasks = document.getElementById('total-tasks-display');
+
+  if (hBal) hBal.textContent = appState.balance;
+  if (wBal) wBal.textContent = `${appState.balance} 💰`;
+  if (sBal) sBal.textContent = `${appState.spentBalance || 0} 💰`;
+  if (tHours) tHours.textContent = `${(appState.totalFocusMinutes / 60).toFixed(1)} ساعة`;
+  if (tTasks) tTasks.textContent = `${appState.totalTasksCompleted} مهمة`;
 }
 
 function initApp() {
@@ -507,7 +592,8 @@ function initApp() {
   renderChallenges();
   renderRewards();
   updateGlobalUI();
-  document.getElementById('daily-quote').textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+  const quoteEl = document.getElementById('daily-quote');
+  if (quoteEl) quoteEl.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
 }
 
-initApp();
+document.addEventListener('DOMContentLoaded', initApp);
