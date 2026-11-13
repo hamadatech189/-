@@ -1,3 +1,7 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
 :root {
   --bg-main: #070b14;
   --bg-card: rgba(22, 32, 51, 0.75);
