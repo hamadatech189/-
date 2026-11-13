@@ -29,7 +29,7 @@
   <!-- المحتوى الرئيسي -->
   <main class="container">
 
-    <!-- 1. قسم البومودورو الاحترافي -->
+    <!-- 1. قسم البومودورو بتصميم Flip Clock -->
     <section id="tab-pomodoro" class="tab-content active">
       <div class="quote-card glass">
         <p id="daily-quote">"النجاح هو مجموع مجهودات صغيرة تتكرر يوماً بعد يوم."</p>
@@ -41,17 +41,37 @@
         <button class="mode-btn" data-mode="long">راحة طويلة</button>
       </div>
 
-      <div class="timer-box glass">
-        <div class="timer-circle">
-          <svg viewBox="0 0 100 100">
-            <circle class="bg-ring" cx="50" cy="50" r="45"></circle>
-            <circle id="progress-ring" class="progress-ring" cx="50" cy="50" r="45"></circle>
-          </svg>
-          <div class="timer-display">
-            <span id="time-left">25:00</span>
-            <small id="session-reward-label">مكافأة الجلسة: +25 💰</small>
+      <!-- حاوية الساعة القلّابة -->
+      <div id="flip-clock-wrapper" class="flip-wrapper glass">
+        <button id="fullscreen-pomo-btn" class="fullscreen-toggle" title="وضع ملء الشاشة">⛶</button>
+        
+        <div class="flip-clock" dir="ltr">
+          <!-- الدقائق -->
+          <div class="flip-group">
+            <div class="flip-card" id="min-tens">
+              <div class="top"><span>2</span></div>
+              <div class="bottom"><span>2</span></div>
+            </div>
+            <div class="flip-card" id="min-ones">
+              <div class="top"><span>5</span></div>
+              <div class="bottom"><span>5</span></div>
+            </div>
+          </div>
+
+          <!-- الثواني -->
+          <div class="flip-group">
+            <div class="flip-card" id="sec-tens">
+              <div class="top"><span>0</span></div>
+              <div class="bottom"><span>0</span></div>
+            </div>
+            <div class="flip-card" id="sec-ones">
+              <div class="top"><span>0</span></div>
+              <div class="bottom"><span>0</span></div>
+            </div>
           </div>
         </div>
+
+        <small id="session-reward-label" class="reward-subtitle">مكافأة الجلسة: +25 💰</small>
 
         <div class="pomo-task-selector">
           <select id="active-task-select">
@@ -78,7 +98,6 @@
         <button id="save-pomo-settings" class="primary-btn full-width">حفظ التعديلات</button>
       </div>
     </section>
-
     <!-- 2. قسم المنظم اليومي والمهام -->
     <section id="tab-tasks" class="tab-content">
       <div class="date-navigator glass">
