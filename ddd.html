@@ -1,150 +1,230 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الشيخ علي - الموقع الرسمي</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* إعدادات الألوان الأساسية المتناسقة مع الفخامة */
-        :root {
-            --primary-gold: #D4AF37;
-            --dark-bg: #0d0d0d;
-            --sec-bg: #1a1a1a;
-            --text-light: #f4f4f4;
-            --text-muted: #a0a0a0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        /* تنسيق الهيدر (الشريط العلوي) */
-        header {
-            background-color: var(--sec-bg);
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-gold);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .logo {
-            font-family: 'Amiri', serif;
-            font-size: 2.2rem;
-            color: var(--primary-gold);
-            text-decoration: none;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--primary-gold);
-        }
-
-        /* تنسيق القسم الرئيسي (Hero Section) */
-        .hero {
-            height: calc(100vh - 80px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            /* يمكنك استبدال الرابط أدناه بصورة خلفية إسلامية أو زخرفة تناسب المحتوى */
-            background: linear-gradient(rgba(13, 13, 13, 0.85), rgba(13, 13, 13, 0.95)), url('https://images.unsplash.com/photo-1584286595398-a59f21d313f5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-        }
-
-        .hero h1 {
-            font-family: 'Amiri', serif;
-            font-size: 4.5rem;
-            color: var(--primary-gold);
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-        }
-
-        .hero p {
-            font-size: 1.4rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
-
-        .cta-button {
-            padding: 15px 40px;
-            background-color: transparent;
-            border: 2px solid var(--primary-gold);
-            color: var(--primary-gold);
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        .cta-button:hover {
-            background-color: var(--primary-gold);
-            color: var(--dark-bg);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-
-        /* تنسيق الفوتر */
-        footer {
-            text-align: center;
-            padding: 25px;
-            background-color: var(--sec-bg);
-            color: var(--text-muted);
-            border-top: 1px solid #333;
-            font-size: 0.9rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>إنجاز حمادة - المحترف</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">الشيخ علي</a>
-        <nav>
-            <a href="#">الرئيسية</a>
-            <a href="#">المقالات</a>
-            <a href="#">المكتبة الصوتية</a>
-            <a href="#">اتصل بنا</a>
-        </nav>
-    </header>
+  <!-- الشريط العلوي الاحترافي -->
+  <header class="top-bar">
+    <div class="user-greeting">
+      <span class="badge">نسخة خاصة</span>
+      <h1>أهلاً، دكتـور حمادة ⚡</h1>
+    </div>
+    <div class="header-actions">
+      <div class="wallet-pill" onclick="switchTab('wallet')">
+        <span>💰</span>
+        <strong id="header-balance">0</strong>
+      </div>
+      <button id="theme-toggle" class="icon-btn" title="تغيير المظهر">☀️</button>
+    </div>
+  </header>
 
-    <section class="hero">
-        <h1>الشيخ علي</h1>
-        <p>مرحباً بكم في المنصة الرسمية. نسعى لتقديم المحتوى الهادف بطابع عصري ومتميز، ليكون مرجعاً موثوقاً لكل باحث عن المعرفة.</p>
-        <a href="#" class="cta-button">تصفح المحتوى</a>
+  <!-- المحتوى الرئيسي -->
+  <main class="container">
+
+    <!-- 1. قسم البومودورو الاحترافي -->
+    <section id="tab-pomodoro" class="tab-content active">
+      <div class="quote-card glass">
+        <p id="daily-quote">"النجاح هو مجموع مجهودات صغيرة تتكرر يوماً بعد يوم."</p>
+      </div>
+
+      <div class="pomo-modes glass">
+        <button class="mode-btn active" data-mode="focus">تركيز عميق</button>
+        <button class="mode-btn" data-mode="short">راحة قصيرة</button>
+        <button class="mode-btn" data-mode="long">راحة طويلة</button>
+      </div>
+
+      <div class="timer-box glass">
+        <div class="timer-circle">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg-ring" cx="50" cy="50" r="45"></circle>
+            <circle id="progress-ring" class="progress-ring" cx="50" cy="50" r="45"></circle>
+          </svg>
+          <div class="timer-display">
+            <span id="time-left">25:00</span>
+            <small id="session-reward-label">مكافأة الجلسة: +25 💰</small>
+          </div>
+        </div>
+
+        <div class="pomo-task-selector">
+          <select id="active-task-select">
+            <option value="">-- ربط الجلسة بمهمة حالية --</option>
+          </select>
+        </div>
+
+        <div class="timer-controls">
+          <button id="start-pause-btn" class="primary-btn pulse-glow">بدء التركيز</button>
+          <button id="reset-timer-btn" class="secondary-btn">إعادة</button>
+          <button id="settings-timer-btn" class="icon-btn">⚙️</button>
+        </div>
+      </div>
+
+      <!-- إعدادات البومودورو -->
+      <div id="pomo-settings-box" class="card glass hidden">
+        <h3>تخصيص أوقات التركيز</h3>
+        <div class="settings-grid">
+          <label>تركيز (دقيقة): <input type="number" id="set-focus" value="25"></label>
+          <label>راحة قصيرة: <input type="number" id="set-short" value="5"></label>
+          <label>راحة طويلة: <input type="number" id="set-long" value="15"></label>
+          <label>مكافأة الجلسة (💰): <input type="number" id="set-reward" value="25"></label>
+        </div>
+        <button id="save-pomo-settings" class="primary-btn full-width">حفظ التعديلات</button>
+      </div>
     </section>
 
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 - موقع الشيخ علي</p>
-    </footer>
+    <!-- 2. قسم المنظم اليومي والمهام -->
+    <section id="tab-tasks" class="tab-content">
+      <div class="date-navigator glass">
+        <button id="prev-day" class="icon-btn">▶</button>
+        <div class="current-date-box">
+          <input type="date" id="selected-date">
+          <span id="date-label">اليوم</span>
+        </div>
+        <button id="next-day" class="icon-btn">◀</button>
+      </div>
 
+      <div class="add-task-box glass">
+        <h3>إضافة مهمة جديدة</h3>
+        <input type="text" id="task-title" placeholder="ما الذي ستنجزه اليوم يا حمادة؟">
+        <div class="task-meta-inputs">
+          <input type="number" id="task-price" placeholder="القيمة (💰)" min="1" value="20">
+          <input type="time" id="task-time" title="وقت التذكير">
+          <button id="add-task-btn" class="primary-btn">إضافة +</button>
+        </div>
+        <button id="enable-notif-btn" class="text-btn">🔔 تفعيل تنبيهات الإشعارات</button>
+      </div>
+
+      <div id="tasks-list" class="items-list"></div>
+    </section>
+
+    <!-- 3. قسم التحديات -->
+    <section id="tab-challenges" class="tab-content">
+      <div class="stats-banner glass">
+        <div>
+          <span>ساعات التركيز الكلية</span>
+          <strong id="total-hours-display">0.0 ساعة</strong>
+        </div>
+        <div class="divider-v"></div>
+        <div>
+          <span>المهام المنجزة</span>
+          <strong id="total-tasks-display">0 مهمة</strong>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2>تحديات الأبطال الكبرى</h2>
+        <button id="toggle-add-challenge" class="secondary-btn">+ تحدي</button>
+      </div>
+
+      <div id="add-challenge-box" class="card glass hidden">
+        <h3>ابتكار تحدي جديد</h3>
+        <input type="text" id="chal-title" placeholder="اسم التحدي (مثلاً: 10 ساعات مذاكرة)">
+        <div class="task-meta-inputs">
+          <select id="chal-type">
+            <option value="hours">ساعات تركيز</option>
+            <option value="tasks">مهام منجزة</option>
+          </select>
+          <input type="number" id="chal-target" placeholder="الهدف المطلوب" min="1">
+          <input type="number" id="chal-reward" placeholder="الجائزة 💰" value="500">
+        </div>
+        <button id="save-challenge-btn" class="primary-btn full-width">إطلاق التحدي</button>
+      </div>
+
+      <div id="challenges-list" class="items-list"></div>
+    </section>
+
+    <!-- 4. قسم المتجر المستقل (جديد كلياً) -->
+    <section id="tab-store" class="tab-content">
+      <div class="store-hero glass">
+        <span class="store-icon">🛍️</span>
+        <h2>متجر المكافآت الشخصية</h2>
+        <p>استبدل أرباح إنجازاتك بمكافآت حقيقية تستحقها بعد تعبك!</p>
+      </div>
+
+      <div class="section-header">
+        <h2>عناصر متجرك</h2>
+        <button id="toggle-add-reward" class="secondary-btn">+ إضافة مكافأة</button>
+      </div>
+
+      <div id="add-reward-box" class="card glass hidden">
+        <h3>إضافة مكافأة جديدة للمتجر</h3>
+        <input type="text" id="reward-title" placeholder="اسم المكافأة (مثلاً: ساعة ألعاب / خروجة)">
+        <div class="task-meta-inputs">
+          <input type="number" id="reward-cost" placeholder="التكلفة بالنقود 💰" min="1" value="100">
+          <button id="save-reward-btn" class="primary-btn">حفظ في المتجر</button>
+        </div>
+      </div>
+
+      <div id="rewards-store-list" class="items-list"></div>
+    </section>
+
+    <!-- 5. قسم المحفظة والبيانات -->
+    <section id="tab-wallet" class="tab-content">
+      <div class="wallet-hero glass">
+        <span>رصيد إنجازات حمادة الكلي</span>
+        <h2 id="wallet-big-balance">0 💰</h2>
+        <div class="wallet-stats-row">
+          <div>مشتريات المتجر: <strong id="spent-balance">0 💰</strong></div>
+        </div>
+      </div>
+
+      <div class="backup-section glass">
+        <h3>🛡️ مركز أمان وتأمين البيانات</h3>
+        <p>كل تقدمك محفوظ تلقائياً. قم بتصدير نسخة احتياطية لدراسة الأمان أو الانتقال لجهاز آخر:</p>
+        <div class="backup-buttons">
+          <button id="export-data-btn" class="secondary-btn">📥 تصدير نسخة احتياطية</button>
+          <label class="secondary-btn file-label">
+            📤 استعادة ملف
+            <input type="file" id="import-data-input" accept=".json" hidden>
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- شريط التنقل السفلي المطور (5 أقسام) -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-target="pomodoro">
+      <span class="nav-icon">⏱️</span>
+      <span>المؤقت</span>
+    </button>
+    <button class="nav-item" data-target="tasks">
+      <span class="nav-icon">📅</span>
+      <span>يومي</span>
+    </button>
+    <button class="nav-item" data-target="challenges">
+      <span class="nav-icon">🏆</span>
+      <span>التحديات</span>
+    </button>
+    <button class="nav-item" data-target="store">
+      <span class="nav-icon">🛍️</span>
+      <span>المتجر</span>
+    </button>
+    <button class="nav-item" data-target="wallet">
+      <span class="nav-icon">💰</span>
+      <span>المحفظة</span>
+    </button>
+  </nav>
+
+  <!-- إشعار منبثق احترافي -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.getRegistrations().then(registrations => {
+        for(let registration of registrations) { registration.update(); }
+      });
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
 </body>
 </html>
